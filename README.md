@@ -1,28 +1,37 @@
 Project Setup
+
 Step-1
-clone this project to your xamp wamp mamp (htdocs or wwww) folder
+Clone this project to your xamp wamp mamp (htdocs or wwww) folder
 
-step-2
-run composer install
+Step-2
+Generate .env file by running 'cp .env.example .env' command
 
-step-3
-run php artisan migrate --seed
-its important to seed your database because i call third party for star wars movie api from MovieSeeder
+Step-3
+Run 'php artisan key:generate' command
 
-step-4
-import api collection which i provided in project root
+Step-4
+Run 'composer install' command
 
-step-5
-update base_url variable in collection varibale named base_url
+Step-5
+Run 'php artisan migrate --seed' command
+Its important to seed the database because thats where the data from third party API for star wars movies is called
 
 step-6
-create user by executing login api from postman or any api testing tool
-then update access_token to token variable in collection varibale named token
+Import API collection (smartWorldTest.postman_collection.json) in postman which is provided in project root
 
 step-7
-check all apis
+Update base_url variable in postman collection varibale named base_url with local url
+
+step-8
+Create user by executing signup API
+OR
+Sign in by executing sign in API
+
+step-9
+Update postman variable 'token' with token from signup/Sign in API response.
+
+step-7
+Check all apis
 
 ---Testing---
-I build this test project according to your requirement using TDD approach.
-So you can also run test by executing
-php artisan test
+This project is developed using TDD approach,Therefore you can also run test by executing 'php artisan test' command.
