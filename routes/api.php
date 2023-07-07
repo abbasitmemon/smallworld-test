@@ -22,9 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //Auth Module
 Route::post('login', [AuthController::class, 'login']);
-Route::post('signUp', [AuthController::class, 'signUp']);
+Route::post('signup', [AuthController::class, 'signup']);
 
 //Authenticated Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+
+
     Route::resource('movies', MovieController::class);
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\LoginRequest;
 use App\Http\Requests\Api\User\SignUpRequest;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,14 +32,14 @@ class AuthController extends Controller
                 return apiResponse(false, __("Invalid Credentials"), [], 401);
             }
             $token = $user->createToken($user->name ?? "smallWorld")->plainTextToken;
-            $data = ['user' => $user, 'token' => $token];
+            $data = ['user' => new UserResource($user), 'token' => $token];
             return apiResponse(true, __('Logged in successfully'), $data);
         } catch (Exception $e) {
             return apiResponse(false, $e->getMessage(), [], 500);
         }
     }
 
-    public function signUp(SignUpRequest $request)
+    public function signup(SignUpRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -50,8 +51,18 @@ class AuthController extends Controller
             $user->save();
             DB::commit();
             $token = $user->createToken($user->name ?? "smallWorld")->plainTextToken;
-            $data = ['user' => $user, 'token' => $token];
-            return apiResponse(true, __('Logged in successfully'), $data);
+            $data = ['user' => new UserResource($user), 'token' => $token];
+            return apiResponse(true, __('Logged in successfully'), $data, 200);
+        } catch (Exception $e) {
+            return apiResponse(false, $e->getMessage(), [], 500);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return apiResponse(true, __('Logged out successfully'), [], 200);
         } catch (Exception $e) {
             return apiResponse(false, $e->getMessage(), [], 500);
         }

@@ -25,13 +25,13 @@ class SignUpRequest extends FormRequest
     {
         return [
             'name'      => 'required',
-            'email'     => 'required|email',
+            'email'     => 'required|email|unique:users,email',
             'password'  => 'required|confirmed'
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(apiResponse(false, implode("\n", $validator->errors()->all()), [], 400));
+        throw new HttpResponseException(apiResponse(false, implode("\n", $validator->errors()->all()), [], 422));
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Movie\UpdateMovieRequest;
+use App\Http\Resources\User\MovieResource;
 use App\Models\Movie;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,6 +23,9 @@ class MovieController extends Controller
                 return $query->where('title', 'like', "%" . $request->search . "%");
             });
             $movies = $movies->orderBy('id', 'desc')->paginate(10);
+            $movies = MovieResource::collection($movies)->response()->getData(true);
+            if ($movies['meta']['total'] <= 0)
+                return apiResponse(false, "movies not found", [], 404);
             return apiResponse(true, "movies found", $movies, 200);
         } catch (Exception $e) {
             return apiResponse(false, $e->getMessage(), [], 500);
@@ -34,14 +39,14 @@ class MovieController extends Controller
         try {
             $movie = Movie::find($id);
             if (!$movie)
-                return apiResponse(true, "movie not found", [], 404);
+                return apiResponse(false, "movie not found", [], 404);
             return apiResponse(true, "movie found", $movie, 200);
         } catch (Exception $e) {
             return apiResponse(false, $e->getMessage(), [], 500);
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateMovieRequest $request, string $id)
     {
         try {
             DB::beginTransaction();
