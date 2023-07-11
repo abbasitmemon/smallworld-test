@@ -25,7 +25,6 @@ class UpdateMovieRequest extends FormRequest
     {
         return [
             'title'         => 'required',
-            'episode_id'    => 'required',
             'opening_crawl' => 'required',
             'director'      => 'required',
             'producer'      => 'required',

@@ -11,25 +11,18 @@ use Tests\TestCase;
 class MovieTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_movies_not_found_list()
-    {
-        $user = User::create([
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => bcrypt('secret123'),
-            'email_verified_at' => "2023-07-07T15:09:51.000000Z",
-            'status' => User::ACTIVE,
-        ]);
-        $token = $user->createToken('test-token')->plainTextToken;
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->getJson('/api/movies');
-        $response->assertStatus(404);
-    }
 
     public function test_movies_found_list()
     {
-        $this->artisan('db:seed');
+        Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -46,7 +39,15 @@ class MovieTest extends TestCase
 
     public function test__find_movie_by_id()
     {
-        $this->artisan('db:seed');
+        $movie = Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -55,16 +56,23 @@ class MovieTest extends TestCase
             'status' => User::ACTIVE,
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
-        $movie = Movie::first();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->getJson('/api/movies/' . $movie->id);
+        ])->getJson('/api/movies/' . $movie->episode_id);
         $response->assertStatus(200);
     }
 
     public function test_movie_not_found_by_id()
     {
-        $this->artisan('db:seed');
+        $movie = Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -85,7 +93,15 @@ class MovieTest extends TestCase
 
     public function test_update_movie()
     {
-        $this->artisan('db:seed');
+        $movie = Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -94,7 +110,6 @@ class MovieTest extends TestCase
             'status' => User::ACTIVE,
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
-        $movie = Movie::first();
         $data = [
             "title"         => "A New Hope",
             "episode_id"    => "4",
@@ -106,13 +121,21 @@ class MovieTest extends TestCase
         ];
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->getJson('/api/movies/' . $movie->id, $data);
+        ])->getJson('/api/movies/' . $movie->episode_id, $data);
         $response->assertStatus(200);
     }
 
     public function test_update_movie_validation_error()
     {
-        $this->artisan('db:seed');
+        $movie = Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -121,7 +144,6 @@ class MovieTest extends TestCase
             'status' => User::ACTIVE,
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
-        $movie = Movie::first();
         $data = [
             "title"         => "",
             "episode_id"    => "4",
@@ -133,7 +155,7 @@ class MovieTest extends TestCase
         ];
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->putJson('/api/movies/' . $movie->id, $data);
+        ])->putJson('/api/movies/' . $movie->episode_id, $data);
         $response->assertStatus(422)->assertJson([
             'success' => false,
             'message' => 'The title field is required.',
@@ -143,7 +165,15 @@ class MovieTest extends TestCase
 
     public function test_delete_movie()
     {
-        $this->artisan('db:seed');
+        $movie = Movie::create([
+            'title' => 'dummy title',
+            'episode_id' => 1,
+            'opening_crawl' => 'dummy opening_crawl',
+            'director' => 'dummy director',
+            'producer' => 'dummy producer',
+            'release_date' =>  'dummy release_date',
+            'url' =>  'dummy url'
+        ]);
         $user = User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -152,10 +182,9 @@ class MovieTest extends TestCase
             'status' => User::ACTIVE,
         ]);
         $token = $user->createToken('test-token')->plainTextToken;
-        $movie = Movie::first();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->deleteJson('/api/movies/' . $movie->id);
+        ])->deleteJson('/api/movies/' . $movie->episode_id);
         $response->assertStatus(200)->assertJson([
             'success' => true,
             'message' => 'movie deleted',

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('episode_id');
+            $table->string('episode_id')->unique();
             $table->text('opening_crawl');
             $table->string('director');
             $table->string('producer');

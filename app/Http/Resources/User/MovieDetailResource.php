@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources\User;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MovieResource extends JsonResource
+class MovieDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,8 +22,13 @@ class MovieResource extends JsonResource
             'producer'      => $this->producer,
             'release_date'  => $this->release_date,
             'url'           => $this->url,
-            "created_at"    => $this->created_at ?? Carbon::now(),
-            "updated_at"    => $this->updated_at ?? Carbon::now(),
+            "created_at"    => $this->created_at,
+            "updated_at"    => $this->updated_at,
+            "planets"       => $this->planets,
+            "characters"    => $this->characters,
+            "vehicles"      => $this->vehicles,
+            "starships"     => $this->starships,
+            "spacies"       => $this->spacies,
         ];
     }
 }

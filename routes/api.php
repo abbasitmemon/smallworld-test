@@ -30,4 +30,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     Route::resource('movies', MovieController::class);
+    /*
+    endpoints For movie Api
+    1 Listing and search filter api
+        Endpoint : /api/movies?search=
+        Request Method : POST
+    2 View full details of a perticular movie
+        Endpoint : /api//movies/{episode_id}
+        Request Method : GET
+    3 Update Basic movie details of a perticular movie
+        Endpoint : /api//movies/{episode_id}
+        Request Method : PUT
+    3 Delete a perticular movie
+        Endpoint : /api//movies/{episode_id}
+        Request Method : DELETE
+
+    */
 });
